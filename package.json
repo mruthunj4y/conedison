@@ -1,10 +1,10 @@
 {
-  "name": "@uniswap/conedison",
+  "name": "@surge/conedison",
   "version": "0.0.1",
-  "description": "Utilities for Uniswap front-end development",
-  "repository": "https://github.com/Uniswap/conedison",
-  "homepage": "https://github.com/Uniswap/conedison#readme",
-  "bugs": "https://github.com/Uniswap/conedison/issues",
+  "description": "Utilities for Surge front-end development",
+  "repository": "https://github.com/mruthunj4y/conedison",
+  "homepage": "https://github.com/mruthunj4y/conedison#readme",
+  "bugs": "https://github.com/mruthunj4y/conedison/issues",
   "files": [
     "dist/"
   ],
