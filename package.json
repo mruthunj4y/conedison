@@ -29,7 +29,7 @@
   "keywords": [
     "utils",
     "utilities",
-    "uniswap"
+    "surge"
   ],
   "license": "GPL-3.0-or-later",
   "dependencies": {},
@@ -47,7 +47,7 @@
     "@types/react": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
-    "@uniswap/sdk-core": "^3.1.0",
+    "@surge/sdk-core": "https://github.com/mruthunj4y/sdk-core.git#build",
     "@walletconnect/ethereum-provider-v1": "npm:@walletconnect/ethereum-provider@^1.8.0",
     "@walletconnect/ethereum-provider-v2": "npm:@walletconnect/ethereum-provider@^2.4.6",
     "babel-jest": "^29.3.0",
@@ -65,7 +65,7 @@
     "typescript": "^4.4.3"
   },
   "peerDependencies": {
-    "@uniswap/sdk-core": ">=3",
+    "@surge/sdk-core": "https://github.com/mruthunj4y/sdk-core.git#build",
     "ethers": "^5.6.1"
   }
 }

@@ -1,4 +1,4 @@
-import { Percent } from '@uniswap/sdk-core'
+import { Percent } from '@surge/sdk-core'
 
 import { formatNumber, formatPriceImpact, formatSlippage, formatUSDPrice, NumberType } from './format'
 

@@ -9,8 +9,8 @@ import { getWalletMeta } from './meta'
 export * from './meta'
 export * from './signing'
 
-function isUniswapWallet(provider: JsonRpcProvider): boolean {
-  return getWalletMeta(provider)?.name === 'Uniswap Wallet'
+function isSurgeWallet(provider: JsonRpcProvider): boolean {
+  return getWalletMeta(provider)?.name === 'Surge Wallet'
 }
 
 /**
@@ -25,7 +25,7 @@ export async function sendTransaction(
   provider: JsonRpcProvider,
   transaction: Deferrable<TransactionRequest>,
   gasMargin = 0,
-  skipGasLimit = isUniswapWallet(provider)
+  skipGasLimit = isSurgeWallet(provider)
 ): Promise<TransactionResponse> {
   const signer = provider.getSigner()
 

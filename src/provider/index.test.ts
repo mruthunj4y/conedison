@@ -52,10 +52,10 @@ describe('sendTransaction', () => {
     expect(signer.sendUncheckedTransaction).toHaveBeenCalledWith({ ...request })
   })
 
-  describe('with Uniswap Wallet', () => {
+  describe('with Surge Wallet', () => {
     beforeEach(() => {
       const getWalletMeta = Meta.getWalletMeta as jest.Mock
-      getWalletMeta.mockReturnValueOnce({ name: 'Uniswap Wallet' })
+      getWalletMeta.mockReturnValueOnce({ name: 'Surge Wallet' })
       getTransaction.mockReturnValueOnce(response)
     })
 

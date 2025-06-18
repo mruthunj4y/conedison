@@ -23,13 +23,20 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 var _a;
 // Number formatting follows the standards laid out in this spec:
-// https://www.notion.so/uniswaplabs/Number-standards-fbb9f533f10e4e22820722c2f66d23c0
-var FIVE_DECIMALS_NO_TRAILING_ZEROS = new Intl.NumberFormat('en-US', {
-    notation: 'standard',
-    maximumFractionDigits: 5,
-});
+// https://www.notion.so/surge/Number-standards-fbb9f533f10e4e22820722c2f66d23c0
 var FIVE_DECIMALS_MAX_TWO_DECIMALS_MIN = new Intl.NumberFormat('en-US', {
     notation: 'standard',
     maximumFractionDigits: 5,
@@ -40,6 +47,11 @@ var FIVE_DECIMALS_MAX_TWO_DECIMALS_MIN_NO_COMMAS = new Intl.NumberFormat('en-US'
     maximumFractionDigits: 5,
     minimumFractionDigits: 2,
     useGrouping: false,
+});
+var NO_DECIMALS = new Intl.NumberFormat('en-US', {
+    notation: 'standard',
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
 });
 var THREE_DECIMALS_NO_TRAILING_ZEROS = new Intl.NumberFormat('en-US', {
     notation: 'standard',
@@ -83,9 +95,10 @@ var SHORTHAND_TWO_DECIMALS_NO_TRAILING_ZEROS = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 2,
 });
-var SHORTHAND_FIVE_DECIMALS_NO_TRAILING_ZEROS = new Intl.NumberFormat('en-US', {
+var SHORTHAND_ONE_DECIMAL = new Intl.NumberFormat('en-US', {
     notation: 'compact',
-    maximumFractionDigits: 5,
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
 });
 var SHORTHAND_USD_TWO_DECIMALS = new Intl.NumberFormat('en-US', {
     notation: 'compact',
@@ -128,6 +141,13 @@ var THREE_SIG_FIGS_USD = new Intl.NumberFormat('en-US', {
     currency: 'USD',
     style: 'currency',
 });
+var SEVEN_SIG_FIGS__SCI_NOTATION_USD = new Intl.NumberFormat('en-US', {
+    notation: 'scientific',
+    minimumSignificantDigits: 7,
+    maximumSignificantDigits: 7,
+    currency: 'USD',
+    style: 'currency',
+});
 // these formatter objects dictate which formatter rule to use based on the interval that
 // the number falls into. for example, based on the rule set below, if your number
 // falls between 1 and 1e6, you'd use TWO_DECIMALS as the formatter.
@@ -152,6 +172,10 @@ var swapTradeAmountFormatter = [
     { upperBound: 1, formatter: FIVE_DECIMALS_MAX_TWO_DECIMALS_MIN_NO_COMMAS },
     { upperBound: Infinity, formatter: SIX_SIG_FIGS_TWO_DECIMALS_NO_COMMAS },
 ];
+var swapPriceFormatter = __spreadArray([
+    { exact: 0, formatter: '0' },
+    { upperBound: 0.00001, formatter: '<0.00001' }
+], __read(swapTradeAmountFormatter), false);
 var fiatTokenDetailsFormatter = [
     { exact: 0, formatter: '$0.00' },
     { upperBound: 0.00000001, formatter: '<$0.00000001' },
@@ -163,11 +187,10 @@ var fiatTokenDetailsFormatter = [
 var fiatTokenPricesFormatter = [
     { exact: 0, formatter: '$0.00' },
     { upperBound: 0.00000001, formatter: '<$0.00000001' },
-    { upperBound: 0.1, formatter: THREE_SIG_FIGS_USD },
-    { upperBound: 1.05, formatter: THREE_DECIMALS_USD },
-    { upperBound: 1000000, formatter: TWO_DECIMALS_USD },
-    { upperBound: 1000000000000000, formatter: SHORTHAND_USD_TWO_DECIMALS },
-    { upperBound: Infinity, formatter: '>$999T' }, // Use M/B/T abbreviations
+    { upperBound: 1, formatter: THREE_SIG_FIGS_USD },
+    { upperBound: 1e6, formatter: TWO_DECIMALS_USD },
+    { upperBound: 1e16, formatter: SHORTHAND_USD_TWO_DECIMALS },
+    { upperBound: Infinity, formatter: SEVEN_SIG_FIGS__SCI_NOTATION_USD },
 ];
 var fiatTokenStatsFormatter = [
     // if token stat value is 0, we probably don't have the data for it, so show '-' as a placeholder
@@ -177,6 +200,7 @@ var fiatTokenStatsFormatter = [
     { upperBound: Infinity, formatter: SHORTHAND_USD_ONE_DECIMAL },
 ];
 var fiatGasPriceFormatter = [
+    { exact: 0, formatter: '$0.00' },
     { upperBound: 0.01, formatter: '<$0.01' },
     { upperBound: 1e6, formatter: TWO_DECIMALS_USD },
     { upperBound: Infinity, formatter: SHORTHAND_USD_TWO_DECIMALS },
@@ -203,12 +227,8 @@ var ntfTokenFloorPriceFormatter = [
     { upperBound: Infinity, formatter: '>999T' },
 ];
 var ntfCollectionStatsFormatter = [
-    { exact: 0, formatter: '0' },
-    { upperBound: 0.00001, formatter: '<0.00001' },
-    { upperBound: 1, formatter: FIVE_DECIMALS_NO_TRAILING_ZEROS },
-    { upperBound: 1e6, formatter: SIX_SIG_FIGS_NO_COMMAS },
-    { upperBound: 1e15, formatter: SHORTHAND_FIVE_DECIMALS_NO_TRAILING_ZEROS },
-    { upperBound: Infinity, formatter: '>999T' },
+    { upperBound: 1000, formatter: NO_DECIMALS },
+    { upperBound: Infinity, formatter: SHORTHAND_ONE_DECIMAL },
 ];
 export var NumberType;
 (function (NumberType) {
@@ -216,6 +236,9 @@ export var NumberType;
     NumberType["TokenNonTx"] = "token-non-tx";
     // used for token quantities in transaction contexts (e.g. swap, send)
     NumberType["TokenTx"] = "token-tx";
+    // this formatter is used for displaying swap price conversions
+    // below the input/output amounts
+    NumberType["SwapPrice"] = "swap-price";
     // this formatter is only used for displaying the swap trade output amount
     // in the text input boxes. Output amounts on review screen should use the above TokenTx formatter
     NumberType["SwapTradeAmount"] = "swap-trade-amount";
@@ -241,6 +264,7 @@ export var NumberType;
 var TYPE_TO_FORMATTER_RULES = (_a = {},
     _a[NumberType.TokenNonTx] = tokenNonTxFormatter,
     _a[NumberType.TokenTx] = tokenTxFormatter,
+    _a[NumberType.SwapPrice] = swapPriceFormatter,
     _a[NumberType.SwapTradeAmount] = swapTradeAmountFormatter,
     _a[NumberType.FiatTokenQuantity] = fiatTokenQuantityFormatter,
     _a[NumberType.FiatTokenDetails] = fiatTokenDetailsFormatter,
@@ -253,13 +277,23 @@ var TYPE_TO_FORMATTER_RULES = (_a = {},
     _a[NumberType.NFTCollectionStats] = ntfCollectionStatsFormatter,
     _a);
 function getFormatterRule(input, type) {
+    var e_1, _a;
     var rules = TYPE_TO_FORMATTER_RULES[type];
-    for (var i = 0; i < rules.length; i++) {
-        var rule = rules[i];
-        if ((rule.exact !== undefined && input === rule.exact) ||
-            (rule.upperBound !== undefined && input < rule.upperBound)) {
-            return rule.formatter;
+    try {
+        for (var rules_1 = __values(rules), rules_1_1 = rules_1.next(); !rules_1_1.done; rules_1_1 = rules_1.next()) {
+            var rule = rules_1_1.value;
+            if ((rule.exact !== undefined && input === rule.exact) ||
+                (rule.upperBound !== undefined && input < rule.upperBound)) {
+                return rule.formatter;
+            }
         }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (rules_1_1 && !rules_1_1.done && (_a = rules_1.return)) _a.call(rules_1);
+        }
+        finally { if (e_1) throw e_1.error; }
     }
     throw new Error("formatter for type ".concat(type, " not configured correctly"));
 }
@@ -282,6 +316,11 @@ export function formatPriceImpact(priceImpact) {
     if (!priceImpact)
         return '-';
     return "".concat(priceImpact.multiply(-1).toFixed(3), "%");
+}
+export function formatSlippage(slippage) {
+    if (!slippage)
+        return '-';
+    return "".concat(slippage.toFixed(3), "%");
 }
 export function formatPrice(price, type) {
     if (type === void 0) { type = NumberType.FiatTokenPrice; }
@@ -313,4 +352,11 @@ export function formatNumberOrString(price, type) {
 export function formatUSDPrice(price, type) {
     if (type === void 0) { type = NumberType.FiatTokenPrice; }
     return formatNumberOrString(price, type);
+}
+/** Formats USD and non-USD prices */
+export function formatFiatPrice(price, currency) {
+    if (currency === void 0) { currency = 'USD'; }
+    if (price === null || price === undefined)
+        return '-';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(price);
 }

@@ -13,7 +13,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -83,7 +83,10 @@ value) {
                 case 4: return [2 /*return*/, _a.sent()];
                 case 5:
                     error_1 = _a.sent();
-                    if (!(typeof error_1.message === 'string' && error_1.message.match(/not (found|implemented)/i))) return [3 /*break*/, 7];
+                    if (!(typeof error_1.message === 'string' &&
+                        (error_1.message.match(/not (found|implemented)/i) ||
+                            error_1.message.match(/TrustWalletConnect.WCError error 1/) ||
+                            error_1.message.match(/Missing or invalid/)))) return [3 /*break*/, 7];
                     console.warn('signTypedData: wallet does not implement EIP-712, falling back to eth_sign', error_1.message);
                     hash = _TypedDataEncoder.hash(populated.domain, types, populated.value);
                     return [4 /*yield*/, signer.provider.send('eth_sign', [address, hash])];

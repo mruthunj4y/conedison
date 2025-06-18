@@ -1,8 +1,9 @@
-import { Currency, CurrencyAmount, Percent, Price } from '@uniswap/sdk-core';
+import { Currency, CurrencyAmount, Percent, Price } from '@surge/sdk-core';
 import { Nullish } from './types';
 export declare enum NumberType {
     TokenNonTx = "token-non-tx",
     TokenTx = "token-tx",
+    SwapPrice = "swap-price",
     SwapTradeAmount = "swap-trade-amount",
     FiatTokenDetails = "fiat-token-details",
     FiatTokenPrice = "fiat-token-price",
@@ -17,6 +18,7 @@ export declare enum NumberType {
 export declare function formatNumber(input: Nullish<number>, type?: NumberType, placeholder?: string): string;
 export declare function formatCurrencyAmount(amount: Nullish<CurrencyAmount<Currency>>, type?: NumberType, placeholder?: string): string;
 export declare function formatPriceImpact(priceImpact: Percent | undefined): string;
+export declare function formatSlippage(slippage: Percent | undefined): string;
 export declare function formatPrice(price: Nullish<Price<Currency, Currency>>, type?: NumberType): string;
 /**
  * Very simple date formatter
@@ -25,3 +27,5 @@ export declare function formatPrice(price: Nullish<Price<Currency, Currency>>, t
 export declare function formatDate(date: Date): string;
 export declare function formatNumberOrString(price: Nullish<number | string>, type: NumberType): string;
 export declare function formatUSDPrice(price: Nullish<number | string>, type?: NumberType): string;
+/** Formats USD and non-USD prices */
+export declare function formatFiatPrice(price: Nullish<number>, currency?: string): string;

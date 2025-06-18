@@ -1,9 +1,9 @@
-import { Currency, CurrencyAmount, Percent, Price } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Percent, Price } from '@surge/sdk-core'
 
 import { Nullish } from './types'
 
 // Number formatting follows the standards laid out in this spec:
-// https://www.notion.so/uniswaplabs/Number-standards-fbb9f533f10e4e22820722c2f66d23c0
+// https://www.notion.so/surge/Number-standards-fbb9f533f10e4e22820722c2f66d23c0
 
 const FIVE_DECIMALS_MAX_TWO_DECIMALS_MIN = new Intl.NumberFormat('en-US', {
   notation: 'standard',
